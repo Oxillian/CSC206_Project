@@ -21,5 +21,5 @@ for number in range(lowest, convertUpperBound):
         else:
             primeList.append(number)
 print(primeList)
-print(len(primeList))
+print("Number of prime numbers: " + str(len(primeList)))
 print ("My program took " + str(time.time() - start_time) + " seconds to run.")
