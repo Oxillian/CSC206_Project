@@ -24,6 +24,9 @@ def index2():
     
     lowest = 0
     primeList=[]
+    list2=[]
+    firstTent=[]
+    lastTent=[]
     """ firstTen= primeList[:10]
     lastTen=primeList[-10:] """
 
@@ -41,12 +44,11 @@ def index2():
                 #If the number is divisible by one and itself, add it to the array and print the array. If the else is lined up with the for, firstTen@bottom needs to be primeList[:10], if lined up with 2nd if, weird stuff happens
             else:
                 primeList.append(number)
-                if len(primeList)<20:
-                    list2=primeList
-                else:
-                    firstTent=primeList[:10]
-                    lastTent=primeList[-10:]
-    """ print(primeList)
-    print("Number of prime numbers: " + str(len(primeList)))
-    print ("My program took " + str(time.time() - start_time) + " seconds to run.") """
-    return render_template('primeList.html', number=upperBound, list=primeList, time=start_time, list2=list2, firstTen=primeList[:10], lastTen=primeList[-10:])
+    if len(primeList)<20:
+        list2=primeList
+    else:
+        firstTent=primeList[:10]
+        lastTent=primeList[-10:]
+  
+    """return render_template('primeList.html', number=upperBound, list=primeList, time=start_time, list2=list2, firstTen=primeList[:10], lastTen=primeList[-10:])"""
+    return render_template('primeList.html', number=upperBound, list=primeList, time=start_time, list2=list2, firstTen=firstTent, lastTen=lastTent)
