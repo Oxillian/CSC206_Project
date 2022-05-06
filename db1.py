@@ -167,7 +167,6 @@ def sportMoney():
     motorcycleGP=0.0
     soccer=0.0
     earnings=[]
-
     for row in athleteData:
         if row.sport=="Boxing":
             boxing+=row.earnings
@@ -207,7 +206,6 @@ def sportMoney():
             
         if row.sport=="Soccer":
             soccer+=row.earnings
-            
     
     earnings.append(boxing)
     earnings.append(autoRacing)
@@ -223,6 +221,18 @@ def sportMoney():
     earnings.append(motorcycleGP)
     earnings.append(soccer)
     earnings.sort()
+
+    sportEarnings={'Boxing': boxing, 'NASCAR': autoRacing, 'Golf': golf, 'Basketball': basketball, 'NFL': nfl, 'Tennis': tennis, 'Baseball': baseball, 'Hockey': iceHockey, 'NFL/Baseball': americanFootballBaseball, 'F1': f1Motorsports, 'Cycling': cycling, 'Motorcycle GP': motorcycleGP, 'Soccer': soccer}
+    sportNames=list(sportEarnings.keys())
+    sportsMoney=list(sportEarnings.values())
+    
+    figure, axis = plt.subplots(1, 3, figsize=(48, 9), sharey=True)
+    axis[0].bar(sportNames, sportsMoney)
+    axis[1].scatter(sportNames, sportsMoney)
+    axis[2].plot(sportNames, sportsMoney)
+    figure.suptitle('Money Made by Sport (in millions)')
+    plt.hist(sportsMoney, rwidth=10000)
+    plt.savefig("static/barchart.png")
 
     lengths=len(earnings)
     return render_template('csv4.html', lengths=lengths, athleteData=earnings, boxing=boxing, autoRacing=autoRacing, golf=golf, basketball=basketball, nfl=nfl, tennis=tennis, baseball=baseball, iceHockey=iceHockey, americanFootballBaseball=americanFootballBaseball, f1Motorsports=f1Motorsports, cycling=cycling, motorcycleGP=motorcycleGP, soccer=soccer)
