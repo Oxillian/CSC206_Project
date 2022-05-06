@@ -20,6 +20,7 @@ from sqlalchemy import Float, create_engine, func, select
 import numpy
 import matplotlib.pyplot as plt
 from pprint import pprint
+from matplotlib.pyplot import figure
 
 
 #Table model
@@ -115,14 +116,11 @@ def americanAthletes():
     pieAmounts.append(baseball)
     pieAmounts.append(americanFootBallBaseball)
     pieAmounts.append(nascar)
-    pieAmounts.append(cycling)
-    #pieAmounts2=[40, 42, 82, 9, 3, 6, 1, 5, 1]
-    print(pieAmounts)
+    pieAmounts.append(cycling)    
 
     fig1, ax1 = plt.subplots()
     ax1.pie(pieAmounts, explode=explode, labels=labels, autopct='%1.1f%%', shadow=False, startangle=90)
     ax1.axis('equal')
-    #plt.show()
     plt.savefig("static/piechart.png")
     
     return render_template("csv2.html", lengths=lengths, athleteName=rowName, athleteNationality=rowNationality, athleteSport=rowSport, athleteYear=rowYear)
@@ -256,6 +254,10 @@ def peopleCountry():
     mexico=0
     people=[]
     
+    pieNames='USA', 'Brazil', 'France', 'Australia', 'Canada', 'UK', 'Austria', 'Germany', 'Russia', 'Italy', 'Finland', 'Switzerland', 'Philippines', 'Portugal', 'Dominican', 'Argentina', 'Filipino', 'Spain', 'Serbia', 'Ireland', 'Mexico'
+    labels=list(pieNames)
+    explode= (0, 1, 0, 1.5, 1.5, 2, 1, 2.5, 1, 2, 1, 3, 1, 2, 1, 2.2, 0, 2.4, 2.6, 2.8, 3)
+    pieAmounts=[]
 
     for row in athleteData:
         if row.nationality=="USA":
@@ -347,6 +349,35 @@ def peopleCountry():
     people.append(mexico)
     people.sort()
     lengths=len(people)
+    
+    pieAmounts.append(usa)
+    pieAmounts.append(brazil)
+    pieAmounts.append(france)
+    pieAmounts.append(australia)
+    pieAmounts.append(canada)
+    pieAmounts.append(uk)
+    pieAmounts.append(austria)
+    pieAmounts.append(germany)
+    pieAmounts.append(russia)
+    pieAmounts.append(italy)
+    pieAmounts.append(finland)
+    pieAmounts.append(switzerland)
+    pieAmounts.append(philippines)
+    pieAmounts.append(portugal)
+    pieAmounts.append(dominican)
+    pieAmounts.append(argentina)
+    pieAmounts.append(filipino)
+    pieAmounts.append(spain)
+    pieAmounts.append(serbia)
+    pieAmounts.append(ireland)
+    pieAmounts.append(mexico)
+    print(pieAmounts)
+
+    fig1, ax1 = plt.subplots()
+    ax1.pie(pieAmounts, explode=explode, labels=labels, autopct='%1.1f%%', shadow=False, startangle=90)
+    ax1.axis('equal')
+    fig1.set_size_inches(14.5, 6.5)
+    plt.savefig("static/piechart2.png")
 
     return render_template('csv5.html', lengths=lengths, athleteData=people, usa=usa, brazil=brazil, france=france, australia=australia, canada=canada, uk=uk, austria=austria, germany=germany, russia=russia, italy=italy, finland=finland, switzerland=switzerland, philippines=philippines, portugal=portugal, dominican=dominican, argentina=argentina, filipino=filipino, spain=spain, serbia=serbia, ireland=ireland, mexico=mexico)
 

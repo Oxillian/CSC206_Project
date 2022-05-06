@@ -26,6 +26,7 @@
     <h1>CSV file about Athletes</h1>
     
     <p></p>
+    <a href="#graph">Graph</a>
     <table class="table table-bordered table-striped table-hover">
         <tr>
             <th>USA</th>
@@ -81,6 +82,9 @@
     {% for i in range(0, lengths)%}
         <li>{{athleteData[i]}}</li>
     {%endfor%}
+
+    <h2 id="graph">Number of Athletes by Country</h2>
+    <img src="../static/piechart2.png">
     
   </body>
 </html>
