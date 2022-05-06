@@ -1,4 +1,6 @@
 from crypt import methods
+from email.mime import base
+from re import I
 from this import d
 from MySQLdb import connect
 from flask import Flask, request, render_template, redirect, session, url_for, jsonify
@@ -16,10 +18,9 @@ from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy import Float, create_engine, func, select
 import numpy
-import matplotlib
-import matplotlib.pyplot
-#Which matplotlib?
+import matplotlib.pyplot as plt
 from pprint import pprint
+
 
 #Table model
 Base = declarative_base()
@@ -60,15 +61,70 @@ def americanAthletes():
     rowNationality=[]
     rowSport=[]
     rowYear=[]
+
+    pieNames='Boxing', 'Golf', 'Basketball', 'Tennis', 'NFL', 'Baseball', 'American Football/Baseball', 'NASCAR', 'Cycling'
+    boxing=0
+    golf=0
+    basketball=0
+    tennis=0
+    nfl=0
+    baseball=0
+    americanFootBallBaseball=0
+    nascar=0
+    cycling=0
+    pieAmounts=[]
+    explode= (0, 0, 0, 0, 2, 1.5, 1.6, 2, 0)
+    labels=list(pieNames)
+
+    
     for row in athleteData:
         #rows.append(row.name + " " + row.nationality + " " + row.sport + " " + row.year)
         rowName.append(row.name)
         rowNationality.append(row.nationality)
         rowSport.append(row.sport)
         rowYear.append(row.year)
-
         lengths=len(athleteData)
-    #realRows=int(rows)
+        #Could put in function. Starts graph section
+        if row.sport=='Boxing':
+            boxing+=1
+        if row.sport=='Golf':
+            golf+=1
+        if row.sport=='Basketball':
+            basketball+=1
+        if row.sport=='Tennis':
+            tennis+=1
+        if row.sport=='NFL':
+            nfl+=1
+        if row.sport=='Baseball':
+            baseball+=1
+        if row.sport=='American Football / Baseball':
+            americanFootBallBaseball+=1
+        if row.sport=='NASCAR':
+            nascar+=1
+        if row.sport=='Auto Racing':
+            nascar+=1
+        if row.sport=='Auto Racing (Nascar)':
+            nascar+=1
+        if row.sport=='Cycling':
+            cycling+=1
+    pieAmounts.append(boxing)
+    pieAmounts.append(golf)
+    pieAmounts.append(basketball)
+    pieAmounts.append(tennis)
+    pieAmounts.append(nfl)
+    pieAmounts.append(baseball)
+    pieAmounts.append(americanFootBallBaseball)
+    pieAmounts.append(nascar)
+    pieAmounts.append(cycling)
+    #pieAmounts2=[40, 42, 82, 9, 3, 6, 1, 5, 1]
+    print(pieAmounts)
+
+    fig1, ax1 = plt.subplots()
+    ax1.pie(pieAmounts, explode=explode, labels=labels, autopct='%1.1f%%', shadow=False, startangle=90)
+    ax1.axis('equal')
+    #plt.show()
+    plt.savefig("static/piechart.png")
+    
     return render_template("csv2.html", lengths=lengths, athleteName=rowName, athleteNationality=rowNationality, athleteSport=rowSport, athleteYear=rowYear)
         
 @app.route('/1athletes', methods=['GET'])
