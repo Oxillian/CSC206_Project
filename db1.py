@@ -1,29 +1,15 @@
-from crypt import methods
-from email.mime import base
-from re import I
-from this import d
-from MySQLdb import connect
-from flask import Flask, request, render_template, redirect, session, url_for, jsonify
-from enum import unique
-import os
-from os.path import join, dirname, realpath
-from datetime import datetime
-#import pandas as pd
-import csv
+from flask import Flask, render_template, session
 import configparser
-from pymysql import Connect
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import declarative_base
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy import Float, create_engine, func, select
+from sqlalchemy import Column, Integer, String
+from sqlalchemy import Float, create_engine
 import numpy
 import matplotlib.pyplot as plt
-from pprint import pprint
 from matplotlib.pyplot import figure
 
 
-#Table model
 Base = declarative_base()
 class Athlete(Base):
     __tablename__ = 'athletes'
@@ -35,14 +21,11 @@ class Athlete(Base):
     sport= Column(String(64))
     year= Column(String(64))
     earnings= Column(Float)
-#Read db connection string
 config = configparser.ConfigParser()
 config.read('./settings.conf')
 
 dbconnect = config["MYSQL"]["CONNECTION_STRING"]
-#dbconnect = 'mysql://root:password@localhost/athletes_data'#Connect to db
 engine = create_engine(dbconnect, echo=True)
-#Create session
 Session = sessionmaker()
 Session.configure(bind=engine)
 session = Session()
@@ -79,13 +62,12 @@ def americanAthletes():
 
     
     for row in athleteData:
-        #rows.append(row.name + " " + row.nationality + " " + row.sport + " " + row.year)
         rowName.append(row.name)
         rowNationality.append(row.nationality)
         rowSport.append(row.sport)
         rowYear.append(row.year)
         lengths=len(athleteData)
-        #Could put in function. Starts graph section
+
         if row.sport=='Boxing':
             boxing+=1
         if row.sport=='Golf':
@@ -108,6 +90,7 @@ def americanAthletes():
             nascar+=1
         if row.sport=='Cycling':
             cycling+=1
+    #Graph Section
     pieAmounts.append(boxing)
     pieAmounts.append(golf)
     pieAmounts.append(basketball)
@@ -124,7 +107,8 @@ def americanAthletes():
     plt.savefig("static/piechart.png")
     
     return render_template("csv2.html", lengths=lengths, athleteName=rowName, athleteNationality=rowNationality, athleteSport=rowSport, athleteYear=rowYear)
-        
+
+
 @app.route('/1athletes', methods=['GET'])
 def numberOnes():
     print("athletes who are currently ranked 1")
@@ -134,19 +118,14 @@ def numberOnes():
     rowPRank=[]
     rowSport=[]
     rowYear=[]
-    #athletesR1=[]
     for athletes in athleteData:
-        #pprint(athletes.name + " " + athletes.nationality + " " + str(athletes.currentrank) + " " + str(athletes.prevyearrank) + " " + athletes.sport)
-        #athletesR1.append(athletes.name + " " + str(athletes.currentrank) + " " + str(athletes.prevyearrank) + " " + athletes.sport + " " + athletes.year)
         rowName.append(athletes.name)
         rowRank.append(athletes.currentrank)
         rowPRank.append(athletes.prevyearrank)
         rowSport.append(athletes.sport)
         rowYear.append(athletes.year)
         lengths=len(athleteData)
-            #or print(db.session.query(Athlete)) or full(from above)
-            #or copy line 48: full=row.query.filter_by(currentrank= '1').all()
-            #need to append it to new list
+    
     return render_template("csv3.html", lengths=lengths, athleteName=rowName, athleteRank=rowRank, athletePRank=rowPRank, athleteSport=rowSport, athleteYear=rowYear)
 
 @app.route('/moneybysport', methods=['GET'])
@@ -390,12 +369,3 @@ def peopleCountry():
     plt.savefig("static/piechart2.png")
 
     return render_template('csv5.html', lengths=lengths, athleteData=people, usa=usa, brazil=brazil, france=france, australia=australia, canada=canada, uk=uk, austria=austria, germany=germany, russia=russia, italy=italy, finland=finland, switzerland=switzerland, philippines=philippines, portugal=portugal, dominican=dominican, argentina=argentina, filipino=filipino, spain=spain, serbia=serbia, ireland=ireland, mexico=mexico)
-
-
-#SQL sum/avg functions?
-#group by? Descending? order by?
-#https://www.geeksforgeeks.org/switch-case-in-python-replacement/
-
-#Part 6
-#avg earnings by sport. pie chart athletes by sport(12% racing). total earnings pie chart by sport
-#https://www.w3schools.com/tags/tryit.asp?filename=tryhtml5_a_href_anchor
